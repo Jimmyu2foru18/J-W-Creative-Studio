@@ -1,0 +1,19 @@
+# Disable Caching for Development/Update Stability
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+</IfModule>
+
+RewriteEngine On
+
+# If requested file or directory exists, serve it as is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirect /api requests to api.php (PathInfo)
+RewriteRule ^api/(.*)$ api.php/$1 [L,QSA]
+
+# Otherwise, redirect to index.html for SPA routing
+RewriteRule ^ index.html [L]
