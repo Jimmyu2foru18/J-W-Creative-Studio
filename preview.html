@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>J&W Creative Studio - Preview</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background-color: #0a0a0a;
+        color: #e4e4e7;
+        line-height: 1.6;
+      }
+      .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+      header {
+        text-align: center;
+        padding: 4rem 1rem 3rem;
+        border-bottom: 1px solid #27272a;
+        margin-bottom: 3rem;
+      }
+      header h1 {
+        font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+        font-size: 3rem;
+        color: #fff;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+      }
+      header p {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #71717a;
+        font-weight: 600;
+      }
+      .badge {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.25rem 0.75rem;
+        background: #7f1d1d;
+        color: #fca5a5;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 2px;
+      }
+      .photographers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+      }
+      .photographer-card {
+        background: #18181b;
+        border: 1px solid #27272a;
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
+      .photographer-card:hover { border-color: #3f3f46; }
+      .card-cover {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+        background: #000;
+      }
+      .card-cover-placeholder {
+        width: 100%;
+        height: 200px;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #3f3f46;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      .card-body { padding: 1.5rem; }
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .profile-img {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #0a0a0a;
+        flex-shrink: 0;
+        background: #000;
+      }
+      .profile-img-placeholder {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #27272a;
+        border: 2px solid #0a0a0a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #52525b;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+      .card-title { flex: 1; }
+      .card-title h2 {
+        font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+        font-size: 1.25rem;
+        color: #fff;
+        margin-bottom: 0.25rem;
+      }
+      .card-title .role {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #71717a;
+        font-weight: 600;
+      }
+      .card-bio {
+        font-size: 0.8rem;
+        color: #a1a1aa;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .card-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .meta-tag {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.5rem;
+        background: #27272a;
+        color: #a1a1aa;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-radius: 2px;
+      }
+      .portfolio-section {
+        border-top: 1px solid #27272a;
+        padding-top: 1rem;
+        margin-top: 1rem;
+      }
+      .portfolio-title {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #71717a;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+      }
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+      .portfolio-grid img {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        display: block;
+        background: #000;
+      }
+      .portfolio-grid .empty {
+        aspect-ratio: 1;
+        background: #27272a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #52525b;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+      }
+      .social-links {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+      .social-links a {
+        font-size: 0.7rem;
+        color: #a1a1aa;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .social-links a:hover { color: #fff; }
+      footer {
+        text-align: center;
+        padding: 3rem 1rem;
+        margin-top: 4rem;
+        border-top: 1px solid #27272a;
+        color: #52525b;
+        font-size: 0.75rem;
+      }
+      @media (max-width: 640px) {
+        header h1 { font-size: 2rem; }
+        .photographers-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>J&W Creative Studio</h1>
+        <p>Photographer Portfolio Preview</p>
+        <span class="badge">Static Preview</span>
+      </div>
+    </header>
+    <main class="container">
+      <div id="photographers" class="photographers-grid"></div>
+    </main>
+    <footer>
+      <p>Static preview for GitHub Pages. Full functionality available with PHP backend.</p>
+    </footer>
+    <script>
+      const photographers = [
+        {
+          "id": "james-mcguigan",
+          "uid": "james-mcguigan",
+          "email": "jimmyu2foru18@gmail.com",
+          "role": "admin",
+          "name": "James McGuigan Jr",
+          "instagram": "jimmyu2foru18",
+          "facebook": "https://www.facebook.com/jimmyu2foru18/",
+          "linkedin": "",
+          "bio": "Creative director and photographer specializing in portrait and event photography.",
+          "pricing_rules": "Contact for custom pricing based on shoot type and duration.",
+          "equipment": "Nikon D3400, D5600, Canon Rebel T3, Polaroid",
+          "availability": "Available Weekends",
+          "profile_image": "/jamesprofile/profile.jpg",
+          "cover_image": "/jamesportfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/DCM%20-%200223.jpeg"}, {"imageUrl": "/DSC_0007.JPG"}, {"imageUrl": "/DSC_0023.JPG"},
+            {"imageUrl": "/DSC_0100.JPG"}, {"imageUrl": "/DSC_0105.JPG"}, {"imageUrl": "/DSC_0115.JPG"},
+            {"imageUrl": "/DSC_0124.JPG"}, {"imageUrl": "/DSC_0155.JPG"}, {"imageUrl": "/DSC_0160.JPG"},
+            {"imageUrl": "/DSC_0161.JPG"}, {"imageUrl": "/DSC_0195.JPG"}, {"imageUrl": "/DSC_0208.JPG"},
+            {"imageUrl": "/DSC_0254.JPG"}, {"imageUrl": "/DSC_0308.JPG"}, {"imageUrl": "/DSC_0311.JPG"},
+            {"imageUrl": "/DSC_0318.JPG"}, {"imageUrl": "/DSC_0319.JPG"}, {"imageUrl": "/DSC_0353.JPG"},
+            {"imageUrl": "/DSC_0354.JPG"}, {"imageUrl": "/DSC_0396.JPG"}, {"imageUrl": "/DSC_0420.JPG"},
+            {"imageUrl": "/DSC_0428.JPG"}, {"imageUrl": "/DSC_0433.JPG"}, {"imageUrl": "/DSC_0436.JPG"},
+            {"imageUrl": "/DSC_0437.JPG"}, {"imageUrl": "/DSC_0444.JPG"}, {"imageUrl": "/DSC_0763.JPG"},
+            {"imageUrl": "/DSC06118.jpg"}, {"imageUrl": "/DSC06218.jpg"}, {"imageUrl": "/DSC06478.jpg"},
+            {"imageUrl": "/DSC06778.jpg"}, {"imageUrl": "/IMG_0516.jpg"}, {"imageUrl": "/IMG_0684.jpg"},
+            {"imageUrl": "/IMG_1236.PNG"}, {"imageUrl": "/IMG_1239.PNG"}, {"imageUrl": "/IMG_1240.PNG"},
+            {"imageUrl": "/IMG_1241.PNG"}, {"imageUrl": "/IMG_1243.jpg"}, {"imageUrl": "/IMG_1244.jpg"},
+            {"imageUrl": "/IMG_1245.jpg"}, {"imageUrl": "/img_1777619319_795.jpg"}, {"imageUrl": "/IMG_2200.jpg"},
+            {"imageUrl": "/IMG_2397.jpg"}, {"imageUrl": "/IMG_2460.jpg"}, {"imageUrl": "/IMG_2940.jpg"},
+            {"imageUrl": "/IMG_4065.jpg"}, {"imageUrl": "/IMG_4087.jpg"}, {"imageUrl": "/IMG_4472.JPG"}
+          ]
+        },
+        {
+          "id": "waleed-bhatti",
+          "uid": "waleed-bhatti",
+          "email": "waleedb219@gmail.com",
+          "role": "photographer",
+          "name": "Waleed Bhatti",
+          "instagram": "waleedb219",
+          "facebook": "https://www.facebook.com/profile.php?id=100067090366463",
+          "linkedin": "",
+          "bio": "Photographer with a passion for capturing authentic moments and visual storytelling.",
+          "pricing_rules": "Packages start at $150 for basic shoots.",
+          "equipment": "Sony DCR HC-26 MiniDV Tape Camcorder, Nikon D40X, Nikon D50 with audio/visual editing, FL Studio",
+          "availability": "Flexible Schedule",
+          "profile_image": "/waleedprofile/profile.jpg",
+          "cover_image": "/waleedportfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/DSC_0049.JPG"}, {"imageUrl": "/DSC_0675.JPG"}, {"imageUrl": "/DSC_0710.JPG"},
+            {"imageUrl": "/DSC_3713.JPG"}, {"imageUrl": "/DSC_3734.JPG"}, {"imageUrl": "/DSCF0023.JPG"}
+          ]
+        },
+        {
+          "id": "abigail-firestein-498",
+          "uid": "abigail-firestein-498",
+          "email": "abigail.firestein@example.com",
+          "role": "photographer",
+          "name": "Abigail Firestein",
+          "instagram": "abigailfirestein",
+          "facebook": "https://www.facebook.com/abigail.firestein",
+          "linkedin": "https://linkedin.com/in/abigail-firestein",
+          "bio": "Fine art photographer with an eye for light and composition.",
+          "pricing_rules": "Session rates vary by package.",
+          "equipment": "Canon EOS R5, RF 50mm f/1.2L",
+          "availability": "By Appointment",
+          "profile_image": "/abigail-firestein-498profile/profile.jpg",
+          "cover_image": "/abigail-firestein-498portfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/img_1778113149_606.jpg"}, {"imageUrl": "/img_1778113158_855.jpg"},
+            {"imageUrl": "/img_1778902120_110.jpg"}, {"imageUrl": "/img_1778902123_353.jpg"}
+          ]
+        },
+        {
+          "id": "alveena-siddiqui-636",
+          "uid": "alveena-siddiqui-636",
+          "email": "alveena.siddiqui@example.com",
+          "role": "photographer",
+          "name": "Alveena Siddiqui",
+          "instagram": "alveenasiddiqui",
+          "facebook": "https://www.facebook.com/alveena.siddiqui",
+          "linkedin": "https://linkedin.com/in/alveena-siddiqui",
+          "bio": "Documentary photographer focusing on human stories and culture.",
+          "pricing_rules": "Project-based pricing available.",
+          "equipment": "Sony A7III, 35mm f/1.4",
+          "availability": "Weekdays Preferred",
+          "profile_image": "/alveena-siddiqui-636profile/profile.jpg",
+          "cover_image": "/alveena-siddiqui-636portfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/img_1778901904_207.jpg"}, {"imageUrl": "/img_1778901920_490.jpg"},
+            {"imageUrl": "/img_1778901938_376.jpg"}, {"imageUrl": "/img_1778902076_164.jpg"}
+          ]
+        },
+        {
+          "id": "bob-ross-478",
+          "uid": "bob-ross-478",
+          "email": "bob.ross@example.com",
+          "role": "photographer",
+          "name": "Bob Ross",
+          "instagram": "bobross478",
+          "facebook": "https://www.facebook.com/bob.ross.478",
+          "linkedin": "",
+          "bio": "Landscape and nature photographer exploring the beauty of the outdoors.",
+          "pricing_rules": "Print sales and licensing inquiries welcome.",
+          "equipment": "Nikon D850, 14-24mm f/2.8",
+          "availability": "Seasonal",
+          "profile_image": "/bob-ross-478profile/profile.jpg",
+          "cover_image": "/bob-ross-478portfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/img_1778904160_985.jpg"}, {"imageUrl": "/img_1778904163_950.jpg"},
+            {"imageUrl": "/img_1778904166_159.jpg"}
+          ]
+        },
+        {
+          "id": "manha-569",
+          "uid": "manha-569",
+          "email": "manha.569@example.com",
+          "role": "photographer",
+          "name": "Manha",
+          "instagram": "manha569",
+          "facebook": "https://www.facebook.com/manha.569",
+          "linkedin": "https://linkedin.com/in/manha-569",
+          "bio": "Fashion and editorial photographer with a modern aesthetic.",
+          "pricing_rules": "Day rate starting at $300.",
+          "equipment": "Hasselblad X2D, 90mm f/2.5",
+          "availability": "Available for Travel",
+          "profile_image": "/manha-569profile/profile.jpg",
+          "cover_image": "/manha-569portfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/img_1777611004_537.jpg"}, {"imageUrl": "/img_1777611091_630.jpg"},
+            {"imageUrl": "/img_1777611231_816.jpg"}, {"imageUrl": "/img_1777611972_496.jpg"},
+            {"imageUrl": "/img_1777612023_103.jpg"}, {"imageUrl": "/img_1777612314_478.jpg"},
+            {"imageUrl": "/img_1778902030_513.jpg"}, {"imageUrl": "/img_1778902034_369.jpg"}
+          ]
+        },
+        {
+          "id": "noor-ali-989",
+          "uid": "noor-ali-989",
+          "email": "noor.ali@example.com",
+          "role": "photographer",
+          "name": "Noor Ali",
+          "instagram": "noorali989",
+          "facebook": "https://www.facebook.com/noor.ali.989",
+          "linkedin": "",
+          "bio": "Street and urban photographer capturing city life.",
+          "pricing_rules": "Walk shoots and commissions.",
+          "equipment": "Fujifilm X-T5, 23mm f/1.4",
+          "availability": "Evenings and Weekends",
+          "profile_image": "/noor-ali-989profile/profile.jpg",
+          "cover_image": "/noor-ali-989portfilio/cover.jpg",
+          "portfolio": [
+            {"imageUrl": "/img_1778901858_601.jpg"}
+          ]
+        }
+      ];
+
+      function renderPhotographers() {
+        const container = document.getElementById('photographers');
+        container.innerHTML = photographers.map(p => {
+          const profileHtml = p.profile_image
+            ? `<img src="${p.profile_image}" alt="${p.name}" class="profile-img" onerror="this.outerHTML='<div class=\\'profile-img-placeholder\\'>No Photo</div>'">`
+            : `<div class="profile-img-placeholder">No Photo</div>`;
+          const coverHtml = p.cover_image
+            ? `<img src="${p.cover_image}" alt="${p.name}" class="card-cover" onerror="this.outerHTML='<div class=\\'card-cover-placeholder\\'>No Cover</div>'">`
+            : `<div class="card-cover-placeholder">No Cover</div>`;
+          const portfolioHtml = p.portfolio && p.portfolio.length > 0
+            ? `<div class="portfolio-grid">${p.portfolio.slice(0, 6).map(img => `<img src="${img.imageUrl}" alt="" loading="lazy" onerror="this.style.display='none'">`).join('')}</div>`
+            : `<div class="portfolio-grid"><div class="empty">No images</div></div>`;
+          const socials = [];
+          if (p.instagram) socials.push(`<a href="https://instagram.com/${p.instagram}" target="_blank">Instagram</a>`);
+          if (p.facebook) socials.push(`<a href="${p.facebook}" target="_blank">Facebook</a>`);
+          if (p.linkedin) socials.push(`<a href="${p.linkedin}" target="_blank">LinkedIn</a>`);
+          return `
+            <article class="photographer-card">
+              ${coverHtml}
+              <div class="card-body">
+                <div class="card-header">
+                  ${profileHtml}
+                  <div class="card-title">
+                    <h2>${p.name}</h2>
+                    <div class="role">${p.role}</div>
+                  </div>
+                </div>
+                <p class="card-bio">${p.bio}</p>
+                <div class="card-meta">
+                  <span class="meta-tag">${p.availability}</span>
+                </div>
+                <div class="portfolio-section">
+                  <div class="portfolio-title">Portfolio</div>
+                  ${portfolioHtml}
+                </div>
+                ${socials.length > 0 ? `<div class="social-links">${socials.join('')}</div>` : ''}
+              </div>
+            </article>
+          `;
+        }).join('');
+      }
+
+      document.addEventListener('DOMContentLoaded', renderPhotographers);
+    </script>
+  </body>
+</html>

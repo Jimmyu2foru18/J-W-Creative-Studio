@@ -1,0 +1,498 @@
+[
+  {
+    "email": "jimmyu2foru18@gmail.com",
+    "cover_image": "/jamesportfilio/cover.jpg",
+    "profile_image": "/jamesprofile/profile.jpg",
+    "pricing_rules": "Contact for custom pricing based on shoot type and duration.",
+    "role": "admin",
+    "portfolio": [
+      {
+        "imageUrl": "/DCM - 0223.jpeg",
+        "userId": "james-mcguigan",
+        "id": "file-982BB0D4"
+      },
+      {
+        "imageUrl": "/DSC_0007.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-2723C56F"
+      },
+      {
+        "imageUrl": "/DSC_0023.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-E1A46FEA"
+      },
+      {
+        "imageUrl": "/DSC_0100.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-6A80190C"
+      },
+      {
+        "imageUrl": "/DSC_0105.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-68780B17"
+      },
+      {
+        "imageUrl": "/DSC_0115.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-DB69BD95"
+      },
+      {
+        "imageUrl": "/DSC_0124.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-BED69DCE"
+      },
+      {
+        "imageUrl": "/DSC_0155.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-5F927D98"
+      },
+      {
+        "imageUrl": "/DSC_0160.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-5EF661FC"
+      },
+      {
+        "imageUrl": "/DSC_0161.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-7CB40543"
+      },
+      {
+        "imageUrl": "/DSC_0195.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-3B484B2E"
+      },
+      {
+        "imageUrl": "/DSC_0208.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-5023A87E"
+      },
+      {
+        "imageUrl": "/DSC_0254.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-07BC8CED"
+      },
+      {
+        "imageUrl": "/DSC_0308.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-25D464F0"
+      },
+      {
+        "imageUrl": "/DSC_0311.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-5EB33D32"
+      },
+      {
+        "imageUrl": "/DSC_0318.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-6CF99CBD"
+      },
+      {
+        "imageUrl": "/DSC_0319.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-62962797"
+      },
+      {
+        "imageUrl": "/DSC_0353.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-E658354F"
+      },
+      {
+        "imageUrl": "/DSC_0354.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-2FAE5999"
+      },
+      {
+        "imageUrl": "/DSC_0396.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-A2ECFFA6"
+      },
+      {
+        "imageUrl": "/DSC_0420.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-139E7752"
+      },
+      {
+        "imageUrl": "/DSC_0428.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-74818A3C"
+      },
+      {
+        "imageUrl": "/DSC_0433.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-3F43CC51"
+      },
+      {
+        "imageUrl": "/DSC_0436.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-A8B0727F"
+      },
+      {
+        "imageUrl": "/DSC_0437.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-CACC8B13"
+      },
+      {
+        "imageUrl": "/DSC_0444.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-0617C720"
+      },
+      {
+        "imageUrl": "/DSC_0763.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-89252009"
+      },
+      {
+        "imageUrl": "/DSC06118.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-019DEDD7"
+      },
+      {
+        "imageUrl": "/DSC06218.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-D46BCE28"
+      },
+      {
+        "imageUrl": "/DSC06478.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-923D5309"
+      },
+      {
+        "imageUrl": "/DSC06778.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-F748709F"
+      },
+      {
+        "imageUrl": "/IMG_0516.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-F4103668"
+      },
+      {
+        "imageUrl": "/IMG_0684.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-FFF0F847"
+      },
+      {
+        "imageUrl": "/IMG_1236.PNG",
+        "userId": "james-mcguigan",
+        "id": "file-AF2B460B"
+      },
+      {
+        "imageUrl": "/IMG_1239.PNG",
+        "userId": "james-mcguigan",
+        "id": "file-90AD28CB"
+      },
+      {
+        "imageUrl": "/IMG_1240.PNG",
+        "userId": "james-mcguigan",
+        "id": "file-6FDC8158"
+      },
+      {
+        "imageUrl": "/IMG_1241.PNG",
+        "userId": "james-mcguigan",
+        "id": "file-9DBEE90A"
+      },
+      {
+        "imageUrl": "/IMG_1243.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-525DC245"
+      },
+      {
+        "imageUrl": "/IMG_1244.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-0678D536"
+      },
+      {
+        "imageUrl": "/IMG_1245.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-79C9833A"
+      },
+      {
+        "imageUrl": "/img_1777619319_795.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-7F049F50"
+      },
+      {
+        "imageUrl": "/IMG_2200.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-B4208E98"
+      },
+      {
+        "imageUrl": "/IMG_2397.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-132B6210"
+      },
+      {
+        "imageUrl": "/IMG_2460.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-A4348FC5"
+      },
+      {
+        "imageUrl": "/IMG_2940.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-C1B928EA"
+      },
+      {
+        "imageUrl": "/IMG_4065.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-4C4FAE2C"
+      },
+      {
+        "imageUrl": "/IMG_4087.jpg",
+        "userId": "james-mcguigan",
+        "id": "file-CFC38E31"
+      },
+      {
+        "imageUrl": "/IMG_4472.JPG",
+        "userId": "james-mcguigan",
+        "id": "file-DDE1E352"
+      }
+    ],
+    "equipment": "Nikon D3400, D5600, Canon Rebel T3, Polaroid",
+    "uid": "james-mcguigan",
+    "linkedin": "",
+    "id": "james-mcguigan",
+    "bio": "Creative director and photographer specializing in portrait and event photography.",
+    "instagram": "jimmyu2foru18",
+    "name": "James McGuigan Jr",
+    "facebook": "https://www.facebook.com/jimmyu2foru18/",
+    "availability": "Available Weekends"
+  },
+  {
+    "email": "waleedb219@gmail.com",
+    "cover_image": "/waleedportfilio/cover.jpg",
+    "profile_image": "/waleedprofile/profile.jpg",
+    "pricing_rules": "Packages start at $150 for basic shoots.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/DSC_0049.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-36294D94"
+      },
+      {
+        "imageUrl": "/DSC_0675.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-082BEDE5"
+      },
+      {
+        "imageUrl": "/DSC_0710.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-88180DFA"
+      },
+      {
+        "imageUrl": "/DSC_3713.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-D2042D41"
+      },
+      {
+        "imageUrl": "/DSC_3734.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-82163A01"
+      },
+      {
+        "imageUrl": "/DSCF0023.JPG",
+        "userId": "waleed-bhatti",
+        "id": "file-E51320CD"
+      }
+    ],
+    "equipment": "Sony DCR HC-26 MiniDV Tape Camcorder, Nikon D40X, Nikon D50 with audio/visual editing, FL Studio",
+    "uid": "waleed-bhatti",
+    "linkedin": "",
+    "id": "waleed-bhatti",
+    "bio": "Photographer with a passion for capturing authentic moments and visual storytelling.",
+    "instagram": "waleedb219",
+    "name": "Waleed Bhatti",
+    "facebook": "https://www.facebook.com/profile.php?id=100067090366463",
+    "availability": "Flexible Schedule"
+  },
+  {
+    "email": "abigail.firestein@example.com",
+    "cover_image": "/abigail-firestein-498portfilio/cover.jpg",
+    "profile_image": "/abigail-firestein-498profile/profile.jpg",
+    "pricing_rules": "Session rates vary by package.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/img_1778113149_606.jpg",
+        "userId": "abigail-firestein-498",
+        "id": "file-D75CD47C"
+      },
+      {
+        "imageUrl": "/img_1778113158_855.jpg",
+        "userId": "abigail-firestein-498",
+        "id": "file-F4BE4C24"
+      },
+      {
+        "imageUrl": "/img_1778902120_110.jpg",
+        "userId": "abigail-firestein-498",
+        "id": "file-9C578B66"
+      },
+      {
+        "imageUrl": "/img_1778902123_353.jpg",
+        "userId": "abigail-firestein-498",
+        "id": "file-2E7B8C5C"
+      }
+    ],
+    "equipment": "Canon EOS R5, RF 50mm f/1.2L",
+    "uid": "abigail-firestein-498",
+    "linkedin": "https://linkedin.com/in/abigail-firestein",
+    "id": "abigail-firestein-498",
+    "bio": "Fine art photographer with an eye for light and composition.",
+    "instagram": "abigailfirestein",
+    "name": "Abigail Firestein",
+    "facebook": "https://www.facebook.com/abigail.firestein",
+    "availability": "By Appointment"
+  },
+  {
+    "email": "alveena.siddiqui@example.com",
+    "cover_image": "/alveena-siddiqui-636portfilio/cover.jpg",
+    "profile_image": "/alveena-siddiqui-636profile/profile.jpg",
+    "pricing_rules": "Project-based pricing available.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/img_1778901904_207.jpg",
+        "userId": "alveena-siddiqui-636",
+        "id": "file-D6C8EE73"
+      },
+      {
+        "imageUrl": "/img_1778901920_490.jpg",
+        "userId": "alveena-siddiqui-636",
+        "id": "file-248B19BA"
+      },
+      {
+        "imageUrl": "/img_1778901938_376.jpg",
+        "userId": "alveena-siddiqui-636",
+        "id": "file-A6BEF191"
+      },
+      {
+        "imageUrl": "/img_1778902076_164.jpg",
+        "userId": "alveena-siddiqui-636",
+        "id": "file-CF5D909E"
+      }
+    ],
+    "equipment": "Sony A7III, 35mm f/1.4",
+    "uid": "alveena-siddiqui-636",
+    "linkedin": "https://linkedin.com/in/alveena-siddiqui",
+    "id": "alveena-siddiqui-636",
+    "bio": "Documentary photographer focusing on human stories and culture.",
+    "instagram": "alveenasiddiqui",
+    "name": "Alveena Siddiqui",
+    "facebook": "https://www.facebook.com/alveena.siddiqui",
+    "availability": "Weekdays Preferred"
+  },
+  {
+    "email": "bob.ross@example.com",
+    "cover_image": "/bob-ross-478portfilio/cover.jpg",
+    "profile_image": "/bob-ross-478profile/profile.jpg",
+    "pricing_rules": "Print sales and licensing inquiries welcome.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/img_1778904160_985.jpg",
+        "userId": "bob-ross-478",
+        "id": "file-C736090F"
+      },
+      {
+        "imageUrl": "/img_1778904163_950.jpg",
+        "userId": "bob-ross-478",
+        "id": "file-4EF18BD0"
+      },
+      {
+        "imageUrl": "/img_1778904166_159.jpg",
+        "userId": "bob-ross-478",
+        "id": "file-0C8DF4A2"
+      }
+    ],
+    "equipment": "Nikon D850, 14-24mm f/2.8",
+    "uid": "bob-ross-478",
+    "linkedin": "",
+    "id": "bob-ross-478",
+    "bio": "Landscape and nature photographer exploring the beauty of the outdoors.",
+    "instagram": "bobross478",
+    "name": "Bob Ross",
+    "facebook": "https://www.facebook.com/bob.ross.478",
+    "availability": "Seasonal"
+  },
+  {
+    "email": "manha.569@example.com",
+    "cover_image": "/manha-569portfilio/cover.jpg",
+    "profile_image": "/manha-569profile/profile.jpg",
+    "pricing_rules": "Day rate starting at $300.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/img_1777611004_537.jpg",
+        "userId": "manha-569",
+        "id": "file-C1035FFB"
+      },
+      {
+        "imageUrl": "/img_1777611091_630.jpg",
+        "userId": "manha-569",
+        "id": "file-75F81456"
+      },
+      {
+        "imageUrl": "/img_1777611231_816.jpg",
+        "userId": "manha-569",
+        "id": "file-ECD53A64"
+      },
+      {
+        "imageUrl": "/img_1777611972_496.jpg",
+        "userId": "manha-569",
+        "id": "file-E60762CF"
+      },
+      {
+        "imageUrl": "/img_1777612023_103.jpg",
+        "userId": "manha-569",
+        "id": "file-64D410F3"
+      },
+      {
+        "imageUrl": "/img_1777612314_478.jpg",
+        "userId": "manha-569",
+        "id": "file-53D7C596"
+      },
+      {
+        "imageUrl": "/img_1778902030_513.jpg",
+        "userId": "manha-569",
+        "id": "file-BAB92494"
+      },
+      {
+        "imageUrl": "/img_1778902034_369.jpg",
+        "userId": "manha-569",
+        "id": "file-C1E09478"
+      }
+    ],
+    "equipment": "Hasselblad X2D, 90mm f/2.5",
+    "uid": "manha-569",
+    "linkedin": "https://linkedin.com/in/manha-569",
+    "id": "manha-569",
+    "bio": "Fashion and editorial photographer with a modern aesthetic.",
+    "instagram": "manha569",
+    "name": "Manha",
+    "facebook": "https://www.facebook.com/manha.569",
+    "availability": "Available for Travel"
+  },
+  {
+    "email": "noor.ali@example.com",
+    "cover_image": "/noor-ali-989portfilio/cover.jpg",
+    "profile_image": "/noor-ali-989profile/profile.jpg",
+    "pricing_rules": "Walk shoots and commissions.",
+    "role": "photographer",
+    "portfolio": [
+      {
+        "imageUrl": "/img_1778901858_601.jpg",
+        "userId": "noor-ali-989",
+        "id": "file-C371F3AD"
+      }
+    ],
+    "equipment": "Fujifilm X-T5, 23mm f/1.4",
+    "uid": "noor-ali-989",
+    "linkedin": "",
+    "id": "noor-ali-989",
+    "bio": "Street and urban photographer capturing city life.",
+    "instagram": "noorali989",
+    "name": "Noor Ali",
+    "facebook": "https://www.facebook.com/noor.ali.989",
+    "availability": "Evenings and Weekends"
+  }
+]
