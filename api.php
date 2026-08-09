@@ -1,41 +1,46 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$host = 'sql206.infinityfree.com';
-$user = 'if0_41764748';
-$pass = 'qqO5VAfzeSXcD0';
-$db   = 'if0_41764748_jwcreativestudio';
+$baseDir = __DIR__;
+$dataDir = $baseDir . '/data';
 
-$conn = new mysqli($host, $user, $pass, $db);
-
-if ($conn->connect_error) {
-    echo json_encode(["error" => "Database connection failed"]);
-    exit;
+function ensureDataDir($dir) {
+    if (!is_dir($dir)) {
+        @mkdir($dir, 0777, true);
+    }
 }
 
-$request_method = $_SERVER["REQUEST_METHOD"];
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// More robust way to find the API endpoint regardless of subdirectory
-$api_path = $uri;
-if (($pos = strpos($uri, '/api.php/')) !== false) {
-    $api_path = substr($uri, $pos + 8);
-} elseif (($pos = strpos($uri, '/api/')) !== false) {
-    $api_path = substr($uri, $pos + 4);
-} else {
-    // Fallback for cases where it might be just /api.php or /api
-    $api_path = preg_replace('/^\/api(\.php)?/', '', $api_path);
+function loadJson($path, $default = []) {
+    if (!file_exists($path)) {
+        return $default;
+    }
+    $content = file_get_contents($path);
+    $data = json_decode($content, true);
+    return $data === null ? $default : $data;
 }
 
-$path = explode('/', trim($api_path, '/'));
-$endpoint = $path[0] ?? '';
+function saveJson($path, $data) {
+    $dir = dirname($path);
+    ensureDataDir($dir);
+    $fp = fopen($path, 'c+');
+    if ($fp) {
+        if (flock($fp, LOCK_EX)) {
+            ftruncate($fp, 0);
+            rewind($fp);
+            fwrite($fp, json_encode($data, JSON_PRETTY_PRINT));
+            fflush($fp);
+            flock($fp, LOCK_UN);
+        }
+        fclose($fp);
+    }
+}
 
 function getFolderBase($userId) {
     if ($userId === 'james-mcguigan') return 'james';
@@ -50,7 +55,7 @@ function findValidImage($userId, $prefix = 'profile') {
     foreach ($extensions as $ext) {
         $filename = ($prefix === 'profile') ? 'profile.' . $ext : 'cover.' . $ext;
         $relPath = $folder . '/' . $filename;
-        if (file_exists(__DIR__ . '/' . $relPath)) return '/' . $relPath;
+        if (file_exists($GLOBALS['baseDir'] . '/' . $relPath)) return '/' . $relPath;
     }
     if ($prefix === 'cover') return findValidImage($userId, 'profile');
     return null;
@@ -66,15 +71,13 @@ function saveBase64Image($base64String, $userId, $type = 'profile') {
 
     $base = getFolderBase($userId);
     $folderName = ($type === 'profile') ? $base . 'profile' : $base . 'portfilio';
-    $dir = __DIR__ . '/' . $folderName;
+    $dir = $GLOBALS['baseDir'] . '/' . $folderName;
     if (!is_dir($dir)) { @mkdir($dir, 0777, true); }
 
-    // Use unique filename to bypass cache
     $timestamp = time();
     $prefix = ($type === 'profile') ? 'profile' : (($type === 'cover') ? 'cover' : 'img');
     
     if ($type === 'profile' || $type === 'cover') {
-        // Delete all old profile/cover images to clean up
         $extensions = ['png', 'jpg', 'jpeg', 'webp', 'avif'];
         foreach ($extensions as $ext) {
             $files = glob($dir . '/' . $prefix . '.*');
@@ -95,11 +98,32 @@ function saveBase64Image($base64String, $userId, $type = 'profile') {
     return '/' . ltrim($base64String, '/');
 }
 
+$request_method = $_SERVER["REQUEST_METHOD"];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+$api_path = $uri;
+if (($pos = strpos($uri, '/api.php/')) !== false) {
+    $api_path = substr($uri, $pos + 8);
+} elseif (($pos = strpos($uri, '/api/')) !== false) {
+    $api_path = substr($uri, $pos + 4);
+} else {
+    $api_path = preg_replace('/^\/api(\.php)?/', '', $api_path);
+}
+
+$path = explode('/', trim($api_path, '/'));
+$endpoint = $path[0] ?? '';
+
+$photographersPath = $dataDir . '/photographers.json';
+$bookingsPath = $dataDir . '/bookings.json';
+
+// Auth endpoints
 if ($endpoint === 'auth' && ($path[1] ?? '') === 'login' && $request_method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $email = $data['email'] ?? '';
     $password = $data['password'] ?? '';
     $isSignUp = $data['isSignUp'] ?? false;
+
+    $photographers = loadJson($photographersPath, []);
 
     if ($isSignUp) {
         $name = $data['name'] ?? '';
@@ -108,20 +132,44 @@ if ($endpoint === 'auth' && ($path[1] ?? '') === 'login' && $request_method === 
         $linkedin = $data['linkedin'] ?? '';
         $role = 'photographer';
         $id = strtolower(preg_replace('/[^a-zA-Z0-9]/', '-', $name)) . '-' . rand(100, 999);
-        $stmt = $conn->prepare("INSERT INTO users (id, email, password_hash, role, name, instagram, facebook, linkedin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssss", $id, $email, $password, $role, $name, $instagram, $facebook, $linkedin);
-        if ($stmt->execute()) {
-            @mkdir(__DIR__ . '/' . $id . 'profile', 0777, true);
-            @mkdir(__DIR__ . '/' . $id . 'portfilio', 0777, true);
-            echo json_encode(["uid" => $id, "id" => $id, "email" => $email, "name" => $name, "role" => $role]);
-        } else {
-            http_response_code(400); echo json_encode(["error" => $conn->error]);
-        }
+        
+        $newUser = [
+            'id' => $id,
+            'uid' => $id,
+            'email' => $email,
+            'password_hash' => $password,
+            'role' => $role,
+            'name' => $name,
+            'instagram' => $instagram,
+            'facebook' => $facebook,
+            'linkedin' => $linkedin,
+            'bio' => '',
+            'pricing_rules' => '',
+            'equipment' => '',
+            'availability' => '',
+            'profile_image' => '',
+            'cover_image' => '',
+            'reset_token' => null,
+            'reset_token_expires' => null,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        
+        $photographers[] = $newUser;
+        saveJson($photographersPath, $photographers);
+        
+        $base = getFolderBase($id);
+        @mkdir($baseDir . '/' . $base . 'profile', 0777, true);
+        @mkdir($baseDir . '/' . $base . 'portfilio', 0777, true);
+        
+        echo json_encode(["uid" => $id, "id" => $id, "email" => $email, "name" => $name, "role" => $role]);
     } else {
-        $stmt = $conn->prepare("SELECT id, id AS uid, email, password_hash, role, name FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $user = $stmt->get_result()->fetch_assoc();
+        $user = null;
+        foreach ($photographers as $u) {
+            if ($u['email'] === $email) {
+                $user = $u;
+                break;
+            }
+        }
         if ($user && $password === $user['password_hash']) {
             unset($user['password_hash']);
             echo json_encode($user);
@@ -134,18 +182,27 @@ elseif ($endpoint === 'auth' && ($path[1] ?? '') === 'forgot-password' && $reque
     $data = json_decode(file_get_contents("php://input"), true);
     $email = $data['email'] ?? '';
     
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $user = $stmt->get_result()->fetch_assoc();
+    $photographers = loadJson($photographersPath, []);
+    $user = null;
+    foreach ($photographers as $u) {
+        if ($u['email'] === $email) {
+            $user = $u;
+            break;
+        }
+    }
     
     if ($user) {
         $token = bin2hex(random_bytes(32));
         $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
         
-        $stmt = $conn->prepare("UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE email = ?");
-        $stmt->bind_param("sss", $token, $expires, $email);
-        $stmt->execute();
+        foreach ($photographers as &$u) {
+            if ($u['email'] === $email) {
+                $u['reset_token'] = $token;
+                $u['reset_token_expires'] = $expires;
+                break;
+            }
+        }
+        saveJson($photographersPath, $photographers);
         
         $resetLink = "https://" . $_SERVER['HTTP_HOST'] . "/reset-password?token=" . $token;
         $subject = "Password Reset - J&W Creative Studio";
@@ -161,19 +218,26 @@ elseif ($endpoint === 'auth' && ($path[1] ?? '') === 'reset-password' && $reques
     $token = $data['token'] ?? '';
     $newPassword = $data['password'] ?? '';
     
-    $stmt = $conn->prepare("SELECT id FROM users WHERE reset_token = ? AND reset_token_expires > NOW()");
-    $stmt->bind_param("s", $token);
-    $stmt->execute();
-    $user = $stmt->get_result()->fetch_assoc();
+    $photographers = loadJson($photographersPath, []);
+    $user = null;
+    foreach ($photographers as $u) {
+        if ($u['reset_token'] === $token && $u['reset_token_expires'] > date('Y-m-d H:i:s')) {
+            $user = $u;
+            break;
+        }
+    }
     
     if ($user) {
-        $stmt = $conn->prepare("UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?");
-        $stmt->bind_param("ss", $newPassword, $user['id']);
-        if ($stmt->execute()) {
-            echo json_encode(["success" => true, "message" => "Password updated successfully"]);
-        } else {
-            http_response_code(500); echo json_encode(["error" => "Failed to update password"]);
+        foreach ($photographers as &$u) {
+            if ($u['id'] === $user['id']) {
+                $u['password_hash'] = $newPassword;
+                $u['reset_token'] = null;
+                $u['reset_token_expires'] = null;
+                break;
+            }
         }
+        saveJson($photographersPath, $photographers);
+        echo json_encode(["success" => true, "message" => "Password updated successfully"]);
     } else {
         http_response_code(400); echo json_encode(["error" => "Invalid or expired token"]);
     }
@@ -184,53 +248,55 @@ elseif ($endpoint === 'auth' && ($path[1] ?? '') === 'change-password' && $reque
     $oldPassword = $data['oldPassword'] ?? '';
     $newPassword = $data['newPassword'] ?? '';
     
-    $stmt = $conn->prepare("SELECT id, password_hash FROM users WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $user = $stmt->get_result()->fetch_assoc();
+    $photographers = loadJson($photographersPath, []);
+    $user = null;
+    foreach ($photographers as $u) {
+        if ($u['email'] === $email) {
+            $user = $u;
+            break;
+        }
+    }
     
     if ($user && $oldPassword === $user['password_hash']) {
-        $stmt = $conn->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
-        $stmt->bind_param("ss", $newPassword, $user['id']);
-        if ($stmt->execute()) {
-            echo json_encode(["success" => true, "message" => "Password changed successfully"]);
-        } else {
-            http_response_code(500); echo json_encode(["error" => "Failed to change password"]);
+        foreach ($photographers as &$u) {
+            if ($u['id'] === $user['id']) {
+                $u['password_hash'] = $newPassword;
+                break;
+            }
         }
+        saveJson($photographersPath, $photographers);
+        echo json_encode(["success" => true, "message" => "Password changed successfully"]);
     } else {
         http_response_code(401); echo json_encode(["error" => "Invalid old password"]);
     }
 }
+// Photographers endpoints
 elseif ($endpoint === 'photographers' && $request_method === 'GET') {
     if (isset($path[1])) {
         $userId = $path[1];
         if (($path[2] ?? '') === 'portfolio') {
-            $stmt = $conn->prepare("SELECT id, image_url AS imageUrl FROM portfolios WHERE user_id = ? ORDER BY created_at DESC");
-            $stmt->bind_param("s", $userId); $stmt->execute();
-            $items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+            $items = [];
             $base = getFolderBase($userId);
             $folder = $base . "portfilio";
-            if (is_dir(__DIR__ . "/" . $folder)) {
-                $files = scandir(__DIR__ . "/" . $folder);
+            if (is_dir($baseDir . "/" . $folder)) {
+                $files = scandir($baseDir . "/" . $folder);
                 foreach ($files as $file) {
                     if (preg_match('/\.(png|jpe?g|gif|webp|avif)$/i', $file) && !strpos($file, 'profile') && !strpos($file, 'cover')) {
                         $url = "/" . $folder . "/" . $file;
-                        $found = false;
-                        foreach($items as $it) { 
-                            $itUrl = '/' . ltrim($it['imageUrl'], '/');
-                            if($itUrl === $url) $found = true; 
-                        }
-                        if(!$found) $items[] = ["id" => "file-" . md5($file), "imageUrl" => $url];
+                        $items[] = ["id" => "file-" . md5($file), "imageUrl" => $url];
                     }
                 }
             }
-            // Ensure all database-stored paths are also absolute
-            foreach($items as &$item) { $item['imageUrl'] = '/' . ltrim($item['imageUrl'], '/'); }
             echo json_encode($items);
         } else {
-            $stmt = $conn->prepare("SELECT id, id AS uid, email, name, bio, pricing_rules, instagram, facebook, linkedin, availability, equipment, profile_image, cover_image, role FROM users WHERE id = ?");
-            $stmt->bind_param("s", $userId); $stmt->execute();
-            $u = $stmt->get_result()->fetch_assoc();
+            $photographers = loadJson($photographersPath, []);
+            $u = null;
+            foreach ($photographers as $p) {
+                if ($p['id'] === $userId) {
+                    $u = $p;
+                    break;
+                }
+            }
             if ($u) {
                 $u['profile_image'] = findValidImage($userId, 'profile') ?: ('/' . ltrim($u['profile_image'], '/'));
                 $u['cover_image'] = findValidImage($userId, 'cover') ?: ('/' . ltrim($u['cover_image'], '/'));
@@ -238,92 +304,143 @@ elseif ($endpoint === 'photographers' && $request_method === 'GET') {
             echo json_encode($u ?: ["error" => "Not found"]);
         }
     } else {
-        $result = $conn->query("SELECT id, id AS uid, email, name, bio, pricing_rules, instagram, facebook, linkedin, availability, equipment, profile_image, cover_image, role FROM users WHERE role IN ('photographer', 'admin')");
-        $users = $result->fetch_all(MYSQLI_ASSOC);
-        foreach ($users as &$u) {
-            $u['profile_image'] = findValidImage($u['id'], 'profile') ?: ('/' . ltrim($u['profile_image'], '/'));
-            $u['cover_image'] = findValidImage($u['id'], 'cover') ?: ('/' . ltrim($u['cover_image'], '/'));
+        $photographers = loadJson($photographersPath, []);
+        $users = [];
+        foreach ($photographers as $u) {
+            if ($u['role'] === 'photographer' || $u['role'] === 'admin') {
+                $u['profile_image'] = findValidImage($u['id'], 'profile') ?: ('/' . ltrim($u['profile_image'], '/'));
+                $u['cover_image'] = findValidImage($u['id'], 'cover') ?: ('/' . ltrim($u['cover_image'], '/'));
+                $users[] = $u;
+            }
         }
         echo json_encode($users);
     }
 }
 elseif ($endpoint === 'photographers' && isset($path[1]) && $request_method === 'POST') {
-    $id = $path[1]; $data = json_decode(file_get_contents("php://input"), true);
+    $id = $path[1];
+    $data = json_decode(file_get_contents("php://input"), true);
+    
     $profileImage = saveBase64Image($data['profileImage'] ?? '', $id, 'profile');
     $coverImage = saveBase64Image($data['coverImage'] ?? '', $id, 'cover');
-    $stmt = $conn->prepare("UPDATE users SET name = ?, bio = ?, pricing_rules = ?, instagram = ?, facebook = ?, linkedin = ?, availability = ?, equipment = ?, profile_image = ?, cover_image = ? WHERE id = ?");
-    $stmt->bind_param("sssssssssss", $data['name'], $data['bio'], $data['pricingRules'], $data['instagram'], $data['facebook'], $data['linkedin'], $data['availability'], $data['equipment'], $profileImage, $coverImage, $id);
-    if ($stmt->execute()) echo json_encode(["success" => true]);
-    else { http_response_code(500); echo json_encode(["error" => $conn->error]); }
+    
+    $photographers = loadJson($photographersPath, []);
+    foreach ($photographers as &$u) {
+        if ($u['id'] === $id) {
+            $u['name'] = $data['name'] ?? $u['name'];
+            $u['bio'] = $data['bio'] ?? $u['bio'];
+            $u['pricing_rules'] = $data['pricingRules'] ?? $u['pricing_rules'];
+            $u['instagram'] = $data['instagram'] ?? $u['instagram'];
+            $u['facebook'] = $data['facebook'] ?? $u['facebook'];
+            $u['linkedin'] = $data['linkedin'] ?? $u['linkedin'];
+            $u['availability'] = $data['availability'] ?? $u['availability'];
+            $u['equipment'] = $data['equipment'] ?? $u['equipment'];
+            if ($profileImage) $u['profile_image'] = $profileImage;
+            if ($coverImage) $u['cover_image'] = $coverImage;
+            break;
+        }
+    }
+    saveJson($photographersPath, $photographers);
+    echo json_encode(["success" => true]);
 }
 elseif ($endpoint === 'portfolio' && isset($path[1]) && $request_method === 'POST') {
-    $id = $path[1]; $data = json_decode(file_get_contents("php://input"), true);
+    $id = $path[1];
+    $data = json_decode(file_get_contents("php://input"), true);
     $imageUrl = saveBase64Image($data['image'] ?? '', $id, 'portfolio');
-    $stmt = $conn->prepare("INSERT INTO portfolios (user_id, image_url) VALUES (?, ?)");
-    $stmt->bind_param("ss", $id, $imageUrl);
-    if ($stmt->execute()) echo json_encode(["success" => true, "imageUrl" => $imageUrl]);
-    else { http_response_code(500); echo json_encode(["error" => $conn->error]); }
+    echo json_encode(["success" => true, "imageUrl" => $imageUrl]);
 }
 elseif ($endpoint === 'portfolio' && isset($path[1]) && $request_method === 'DELETE') {
     $portfolioId = $path[1];
-    $stmt = $conn->prepare("SELECT image_url FROM portfolios WHERE id = ?");
-    $stmt->bind_param("s", $portfolioId);
-    $stmt->execute();
-    $item = $stmt->get_result()->fetch_assoc();
-    if ($item) {
-        $filePath = __DIR__ . '/' . ltrim($item['image_url'], '/');
-        $stmt = $conn->prepare("DELETE FROM portfolios WHERE id = ?");
-        $stmt->bind_param("s", $portfolioId);
-        if ($stmt->execute()) {
-            if (file_exists($filePath) && is_file($filePath)) @unlink($filePath);
-            echo json_encode(["success" => true]);
-        } else {
-            http_response_code(500); echo json_encode(["error" => "Failed to delete from database"]);
+    $hash = preg_replace('/^file-/', '', $portfolioId);
+    $found = false;
+    
+    $photographers = loadJson($photographersPath, []);
+    foreach ($photographers as $u) {
+        $base = getFolderBase($u['id']);
+        $folder = $base . "portfilio";
+        $dir = $baseDir . "/" . $folder;
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+            foreach ($files as $file) {
+                if (preg_match('/\.(png|jpe?g|gif|webp|avif)$/i', $file) && !strpos($file, 'profile') && !strpos($file, 'cover')) {
+                    $fileHash = md5_file($dir . '/' . $file);
+                    if ($fileHash === $hash) {
+                        @unlink($dir . '/' . $file);
+                        $found = true;
+                        break 2;
+                    }
+                }
+            }
         }
+    }
+    
+    if ($found) {
+        echo json_encode(["success" => true]);
     } else {
         http_response_code(404); echo json_encode(["error" => "Item not found"]);
     }
 }
+// Bookings endpoint
 elseif ($endpoint === 'bookings' && $request_method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
-    $stmt = $conn->prepare("INSERT INTO bookings (client_name, client_email, photographer_id, budget_offer, message) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $data['client_name'], $data['client_email'], $data['photographer_id'], $data['budget_offer'], $data['message']);
-    $stmt->execute();
-    echo json_encode(["success" => true, "id" => $conn->insert_id]);
+    $bookings = loadJson($bookingsPath, []);
+    $booking = [
+        'id' => count($bookings) > 0 ? max(array_column($bookings, 'id')) + 1 : 1,
+        'client_name' => $data['client_name'] ?? '',
+        'client_email' => $data['client_email'] ?? '',
+        'photographer_id' => $data['photographer_id'] ?? '',
+        'budget_offer' => $data['budget_offer'] ?? '',
+        'message' => $data['message'] ?? '',
+        'status' => 'pending',
+        'created_at' => date('Y-m-d H:i:s')
+    ];
+    $bookings[] = $booking;
+    saveJson($bookingsPath, $bookings);
+    echo json_encode(["success" => true, "id" => $booking['id']]);
 }
+// Admin endpoints
 elseif ($endpoint === 'admin' && ($path[1] ?? '') === 'users' && $request_method === 'GET') {
-    $result = $conn->query("SELECT id, name, email, role FROM users ORDER BY created_at DESC");
-    $users = $result->fetch_all(MYSQLI_ASSOC);
+    $photographers = loadJson($photographersPath, []);
+    $users = [];
+    foreach ($photographers as $u) {
+        $users[] = [
+            'id' => $u['id'],
+            'name' => $u['name'],
+            'email' => $u['email'],
+            'role' => $u['role']
+        ];
+    }
     echo json_encode($users);
 }
 elseif ($endpoint === 'admin' && ($path[1] ?? '') === 'users' && isset($path[2]) && $request_method === 'DELETE') {
     $userId = $path[2];
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->bind_param("s", $userId);
-    if ($stmt->execute()) echo json_encode(["success" => true]);
-    else { http_response_code(500); echo json_encode(["error" => $conn->error]); }
+    $photographers = loadJson($photographersPath, []);
+    $newPhotographers = [];
+    foreach ($photographers as $u) {
+        if ($u['id'] !== $userId) {
+            $newPhotographers[] = $u;
+        }
+    }
+    saveJson($photographersPath, $newPhotographers);
+    echo json_encode(["success" => true]);
 }
 elseif ($endpoint === 'admin' && ($path[1] ?? '') === 'users' && ($path[2] ?? '') === 'bulk-update' && $request_method === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $users = $data['users'] ?? [];
     if (!is_array($users)) { http_response_code(400); echo json_encode(["error" => "Invalid users array"]); exit; }
     
-    $conn->begin_transaction();
-    try {
-        $stmt = $conn->prepare("UPDATE users SET role = ? WHERE id = ?");
-        foreach ($users as $u) {
-            $stmt->bind_param("ss", $u['role'], $u['id']);
-            $stmt->execute();
+    $photographers = loadJson($photographersPath, []);
+    foreach ($photographers as &$u) {
+        foreach ($users as $update) {
+            if ($u['id'] === $update['id']) {
+                $u['role'] = $update['role'];
+                break;
+            }
         }
-        $conn->commit();
-        echo json_encode(["success" => true]);
-    } catch (Exception $e) {
-        $conn->rollback();
-        http_response_code(500); echo json_encode(["error" => $e->getMessage()]);
     }
+    saveJson($photographersPath, $photographers);
+    echo json_encode(["success" => true]);
 }
 else {
     http_response_code(404); echo json_encode(["error" => "Not found"]);
 }
-$conn->close();
 ?>
