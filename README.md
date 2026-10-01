@@ -32,6 +32,8 @@ J-W-Creative-Studio/
 
 > The project structure may vary depending on the current implementation.
 
+<img src="./JW%20Creative%20Studio.png" width="550" height="750">
+
 ## Getting Started
 
 ### Prerequisites
