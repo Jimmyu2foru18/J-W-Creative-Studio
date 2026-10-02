@@ -2,6 +2,8 @@
 
 A art & photography studio website designed to showcase digital work, creative projects, services, and portfolio experiences through a clean and responsive web interface.
 
+<video src="./jimmyu2foru18-j-w-creative-studio-explained.mp4" controls width="100%"></video>
+
 ## Overview
 
 J-W Creative Studio a professional digital presence for presenting creative work and services. The project focuses on clear content organization, responsive design, and a polished user experience across desktop and mobile devices.
