@@ -2,7 +2,7 @@
 
 A art & photography studio website designed to showcase digital work, creative projects, services, and portfolio experiences through a clean and responsive web interface.
 
-<video src="./jimmyu2foru18-j-w-creative-studio-explained.mp4" controls width="100%"></video>
+[![Watch Video Preview](./preview.png)](./jimmyu2foru18-j-w-creative-studio-explained.mp4)
 
 ## Overview
 
